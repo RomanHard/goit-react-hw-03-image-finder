@@ -17,7 +17,7 @@ class App extends Component {
       `${BASE_URL}?q=${query}&page=1&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`
     );
     const data = await response.json();
-
+    console.log(data);
     const images = data.hits.map(({ id, webformatURL, largeImageURL }) => ({
       id,
       webformatURL,
