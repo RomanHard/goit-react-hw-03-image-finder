@@ -1,16 +1,16 @@
-export const App = () => {
+import React from 'react';
+import Searchbar from './searchbar/Searchbar';
+
+function App() {
+  const handleSubmit = value => {
+    console.log(value);
+  };
+
   return (
-    <div
-      style={{
-        height: '100vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        fontSize: 40,
-        color: '#010101'
-      }}
-    >
-      React homework template
+    <div className="App">
+      <Searchbar onSubmit={handleSubmit} />
     </div>
   );
-};
+}
+
+export default App;
