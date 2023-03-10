@@ -5,12 +5,13 @@ import Button from './button/Button';
 
 const API_KEY = '27264356-434762754b358cf0758f386e7';
 const BASE_URL = 'https://pixabay.com/api/';
+
 class App extends Component {
   state = {
     searchQuery: '',
     images: [],
     currentPage: 1,
-    isLoadMoreButtonVisible: false,
+    isLoading: false,
   };
 
   handleSubmit = async query => {
@@ -18,37 +19,37 @@ class App extends Component {
       searchQuery: query,
       images: [],
       currentPage: 1,
-      isLoadMoreButtonVisible: false,
     });
 
-    await this.fetchImages();
+    await this.fetchImages(1);
   };
 
   handleLoadMoreClick = async () => {
-    await this.fetchImages(this.state.currentPage + 1); // використовуємо this.state.currentPage
+    const { currentPage } = this.state;
+    await this.fetchImages(currentPage + 1);
   };
-  fetchImages = async newPage => {
-    // отримуємо нове значення сторінки
-    const { searchQuery } = this.state;
+
+  fetchImages = async page => {
+    const { searchQuery, images } = this.state;
     this.setState({ isLoading: true });
 
     try {
       const response = await fetch(
-        `${BASE_URL}?q=${searchQuery}&page=${newPage}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`
+        `${BASE_URL}?q=${searchQuery}&page=${page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`
       );
       const data = await response.json();
+      const newImages = data.hits.map(
+        ({ id, webformatURL, largeImageURL }) => ({
+          id,
+          webformatURL,
+          largeImageURL,
+        })
+      );
 
-      const images = data.hits.map(({ id, webformatURL, largeImageURL }) => ({
-        id,
-        webformatURL,
-        largeImageURL,
-      }));
-
-      this.setState(prevState => ({
-        images: newPage === 1 ? images : [...prevState.images, ...images],
-        currentPage: newPage, // оновлюємо значення сторінки
-        isLoadMoreButtonVisible: images.length === 12,
-      }));
+      this.setState({
+        images: [...images, ...newImages],
+        currentPage: page,
+      });
     } catch (error) {
       console.log(error);
     } finally {
@@ -57,15 +58,17 @@ class App extends Component {
   };
 
   render() {
-    const { images, isLoadMoreButtonVisible } = this.state;
+    const { images, isLoading } = this.state;
+    const isLoadMoreButtonVisible = images.length >= 12;
 
     return (
       <div className="App">
         <Searchbar onSubmit={this.handleSubmit} />
-        <ImageGallery images={images} onClick={this.handleOpenModal} />
-        {isLoadMoreButtonVisible && images.length > 0 && (
-          <Button onClick={this.handleLoadMoreClick} disabled={false} />
+        <ImageGallery images={images} />
+        {isLoadMoreButtonVisible && !isLoading && (
+          <Button onClick={this.handleLoadMoreClick} />
         )}
+        {isLoading && <p>Loading...</p>}
       </div>
     );
   }
