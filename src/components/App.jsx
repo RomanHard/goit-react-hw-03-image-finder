@@ -27,8 +27,8 @@ class App extends Component {
   handleLoadMoreClick = async () => {
     await this.fetchImages(this.state.currentPage + 1); // використовуємо this.state.currentPage
   };
-
   fetchImages = async newPage => {
+    // отримуємо нове значення сторінки
     const { searchQuery } = this.state;
     this.setState({ isLoading: true });
 
@@ -45,8 +45,8 @@ class App extends Component {
       }));
 
       this.setState(prevState => ({
-        images: [...prevState.images, ...images],
-        currentPage: newPage, // оновлюємо значення currentPage
+        images: newPage === 1 ? images : [...prevState.images, ...images],
+        currentPage: newPage, // оновлюємо значення сторінки
         isLoadMoreButtonVisible: images.length === 12,
       }));
     } catch (error) {
