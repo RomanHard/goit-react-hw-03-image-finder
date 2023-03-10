@@ -1,9 +1,9 @@
 import './ImageGalleryItem-module.css';
 
-const GalleryItem = ({ imageUrl, alt }) => {
+const GalleryItem = ({ webformatURL, alt }) => {
   return (
     <li className="gallery-item">
-      <img src={imageUrl} alt={alt} className="gallery-item-image" />
+      <img src={webformatURL} alt={alt} className="gallery-item-image" />
     </li>
   );
 };
