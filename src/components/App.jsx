@@ -7,12 +7,11 @@ const BASE_URL = 'https://pixabay.com/api/';
 
 class App extends Component {
   state = {
-    searchQuery: '',
     images: [],
   };
 
   handleSubmit = async query => {
-    this.setState({ searchQuery: query, images: [] });
+    this.setState({ images: [] });
 
     const response = await fetch(
       `${BASE_URL}?q=${query}&page=1&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`
@@ -29,7 +28,7 @@ class App extends Component {
   };
 
   render() {
-    const { searchQuery, images } = this.state;
+    const { images } = this.state;
 
     return (
       <div className="App">

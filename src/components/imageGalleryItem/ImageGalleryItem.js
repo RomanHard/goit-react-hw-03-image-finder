@@ -1,4 +1,3 @@
-import React from 'react';
 import './ImageGalleryItem-module.css';
 
 const GalleryItem = ({ imageUrl, alt }) => {

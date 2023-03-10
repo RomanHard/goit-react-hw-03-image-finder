@@ -1,6 +1,5 @@
-import React from 'react';
 import './ImageGallery-module.css';
-import ImageGalleryItem from './imageGalleryItem/ImageGalleryItem.js';
+import ImageGalleryItem from '../imageGalleryItem/ImageGalleryItem';
 
 const ImageGallery = ({ images }) => {
   return (
