@@ -69,7 +69,6 @@ class App extends Component {
   };
 
   handleOpenModal = largeImageURL => {
-    console.log(1234);
     this.setState({ largeImageURL });
   };
 
