@@ -3,6 +3,7 @@ import Searchbar from './searchbar/Searchbar';
 import ImageGallery from './imageGallery/ImageGallery';
 import Button from './button/Button';
 import Spinner from './loader/Loader';
+import Modal from './modal/Modal';
 
 const API_KEY = '27264356-434762754b358cf0758f386e7';
 const BASE_URL = 'https://pixabay.com/api/';
@@ -15,6 +16,7 @@ class App extends Component {
     isLoadMoreButtonVisible: false,
     isLoading: false,
     totalHits: null,
+    largeImageURL: null,
   };
 
   handleSubmit = async query => {
@@ -23,6 +25,7 @@ class App extends Component {
       images: [],
       currentPage: 1,
       isLoadMoreButtonVisible: false,
+      isLoading: false,
     });
 
     await this.fetchImages(1);
@@ -65,6 +68,15 @@ class App extends Component {
     }
   };
 
+  handleOpenModal = largeImageURL => {
+    console.log(1234);
+    this.setState({ largeImageURL });
+  };
+
+  handleCloseModal = () => {
+    this.setState({ largeImageURL: null });
+  };
+
   render() {
     const { images, isLoadMoreButtonVisible, isLoading } = this.state;
 
@@ -75,6 +87,12 @@ class App extends Component {
         {isLoading && <Spinner />}
         {isLoadMoreButtonVisible && (
           <Button onClick={this.handleLoadMoreClick} disabled={isLoading} />
+        )}
+        {this.state.largeImageURL && (
+          <Modal
+            largeImageURL={this.state.largeImageURL}
+            onClose={this.handleCloseModal}
+          />
         )}
       </div>
     );
