@@ -22,7 +22,7 @@ class App extends Component {
       searchQuery: query,
       images: [],
       currentPage: 1,
-      isLoadMoreButtonVisible: false, // змінюємо на false, щоб потім перевірити, чи потрібно показувати кнопку
+      isLoadMoreButtonVisible: false,
     });
 
     await this.fetchImages(1);
