@@ -16,3 +16,30 @@
   box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2),
     0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
 }
+
+.button-label {
+  font-size: 1.25rem;
+  font-weight: 150;
+  line-height: 1.6;
+  letter-spacing: 0.0075em;
+}
+
+.input {
+  width: 25%;
+  margin-left: 24px;
+  margin-right: 24px;
+  padding: 6px 0;
+  font-size: 1.25rem;
+  font-weight: 150;
+  line-height: 1.6;
+  letter-spacing: 0.0075em;
+  border: none;
+  outline: none;
+}
+
+.form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
