@@ -28,8 +28,6 @@ class App extends Component {
     await this.fetchImages(1);
   };
 
-  // handleOpenModal = e => { };
-
   handleLoadMoreClick = async () => {
     const { currentPage } = this.state;
     await this.fetchImages(currentPage + 1);
