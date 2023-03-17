@@ -4,9 +4,10 @@ import ImageGallery from './imageGallery/ImageGallery';
 import Button from './button/Button';
 import Spinner from './loader/Loader';
 import Modal from './modal/Modal';
+import axios from 'axios';
 
 const API_KEY = '27264356-434762754b358cf0758f386e7';
-const BASE_URL = 'https://pixabay.com/api/';
+axios.defaults.baseURL = 'https://pixabay.com/api/';
 
 class App extends Component {
   state = {
@@ -18,6 +19,11 @@ class App extends Component {
     totalHits: null,
     largeImageURL: null,
   };
+
+  componentDidMount() {
+    const { currentPage } = this.state;
+    this.fetchImages(currentPage);
+  }
 
   handleSubmit = async query => {
     this.setState({
@@ -41,10 +47,16 @@ class App extends Component {
     this.setState({ isLoading: true });
 
     try {
-      const response = await fetch(
-        `${BASE_URL}?q=${searchQuery}&page=${page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`
-      );
-      const data = await response.json();
+      const { data } = await axios.get('', {
+        params: {
+          q: searchQuery,
+          page,
+          key: API_KEY,
+          image_type: 'photo',
+          orientation: 'horizontal',
+          per_page: 12,
+        },
+      });
 
       const newImages = data.hits.map(
         ({ id, webformatURL, largeImageURL }) => ({
