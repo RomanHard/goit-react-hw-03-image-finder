@@ -61,12 +61,12 @@ class App extends Component {
       page
     );
 
-    this.setState(prevState => ({
-      images: [...prevState.images, ...images],
+    this.setState({
+      images,
       currentPage: page,
       isLoadMoreButtonVisible,
       totalHits,
-    }));
+    });
 
     this.setState({ isLoading: false });
   };
