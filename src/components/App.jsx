@@ -6,6 +6,8 @@ import Spinner from './loader/Loader';
 import Modal from './modal/Modal';
 import axios from 'axios';
 
+import { fetchImages } from './api';
+
 const API_KEY = '27264356-434762754b358cf0758f386e7';
 axios.defaults.baseURL = 'https://pixabay.com/api/';
 
@@ -20,12 +22,33 @@ class App extends Component {
     largeImageURL: null,
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     const { currentPage } = this.state;
-    this.fetchImages(currentPage);
+    await this.fetchImages(currentPage);
   }
 
-  handleSubmit = async query => {
+  async componentDidUpdate(prevProps, prevState) {
+    const { searchQuery, currentPage } = this.state;
+    if (prevState.searchQuery !== searchQuery) {
+      await this.fetchImages(1);
+    } else if (prevState.currentPage !== currentPage) {
+      await this.fetchImages(currentPage);
+    }
+  }
+
+  componentWillUnmount() {
+    this.setState({
+      searchQuery: '',
+      images: [],
+      currentPage: 1,
+      isLoadMoreButtonVisible: false,
+      isLoading: false,
+      totalHits: null,
+      largeImageURL: null,
+    });
+  }
+
+  handleSubmit = query => {
     this.setState({
       searchQuery: query,
       images: [],
@@ -33,30 +56,19 @@ class App extends Component {
       isLoadMoreButtonVisible: false,
       isLoading: false,
     });
-
-    await this.fetchImages(1);
   };
 
   handleLoadMoreClick = async () => {
     const { currentPage } = this.state;
-    await this.fetchImages(currentPage + 1);
+    this.setState({ currentPage: currentPage + 1 });
   };
 
-  fetchImages = async page => {
+  async fetchImages(page) {
     const { searchQuery, images } = this.state;
     this.setState({ isLoading: true });
 
     try {
-      const { data } = await axios.get('', {
-        params: {
-          q: searchQuery,
-          page,
-          key: API_KEY,
-          image_type: 'photo',
-          orientation: 'horizontal',
-          per_page: 12,
-        },
-      });
+      const data = await fetchImages(searchQuery, page);
 
       const newImages = data.hits.map(
         ({ id, webformatURL, largeImageURL }) => ({
@@ -67,8 +79,7 @@ class App extends Component {
       );
 
       this.setState(prevState => ({
-        images: page === 1 ? newImages : [...prevState.images, ...newImages],
-        currentPage: page,
+        images: [...prevState.images, ...newImages],
         totalHits: data.totalHits,
         isLoadMoreButtonVisible:
           images.length + newImages.length < data.totalHits,
@@ -78,7 +89,7 @@ class App extends Component {
     } finally {
       this.setState({ isLoading: false });
     }
-  };
+  }
 
   handleOpenModal = largeImageURL => {
     this.setState({ largeImageURL });
