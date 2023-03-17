@@ -35,7 +35,10 @@ class App extends Component {
       this.fetchImages(1);
     }
 
-    if (prevState.currentPage !== this.state.currentPage) {
+    if (
+      prevState.currentPage !== this.state.currentPage &&
+      this.state.images.length > 0
+    ) {
       this.fetchImages(this.state.currentPage);
     }
   }
@@ -83,7 +86,17 @@ class App extends Component {
 
   handleLoadMoreClick = async () => {
     const { currentPage } = this.state;
-    this.setState({ currentPage: currentPage + 1 });
+    const nextPage = currentPage + 1;
+    const { images: newImages, isLoadMoreButtonVisible } = await fetchImages(
+      this.state.searchQuery,
+      nextPage
+    );
+
+    this.setState(prevState => ({
+      images: [...prevState.images, ...newImages],
+      currentPage: nextPage,
+      isLoadMoreButtonVisible,
+    }));
   };
 
   handleOpenModal = largeImageURL => {
