@@ -85,18 +85,18 @@ class App extends Component {
   };
 
   handleLoadMoreClick = async () => {
-    const { currentPage, images } = this.state;
+    const { currentPage } = this.state;
     const nextPage = currentPage + 1;
     const { images: newImages, isLoadMoreButtonVisible } = await fetchImages(
       this.state.searchQuery,
       nextPage
     );
 
-    this.setState({
-      images: [...images, ...newImages],
+    this.setState(prevState => ({
+      images: [...prevState.images, ...newImages],
       currentPage: nextPage,
       isLoadMoreButtonVisible,
-    });
+    }));
   };
 
   handleOpenModal = largeImageURL => {
