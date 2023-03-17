@@ -4,12 +4,7 @@ import ImageGallery from './imageGallery/ImageGallery';
 import Button from './button/Button';
 import Spinner from './loader/Loader';
 import Modal from './modal/Modal';
-import axios from 'axios';
-
-import { fetchImages } from './api';
-
-const API_KEY = '27264356-434762754b358cf0758f386e7';
-axios.defaults.baseURL = 'https://pixabay.com/api/';
+import { fetchImages } from './api/Api';
 
 class App extends Component {
   state = {
@@ -22,17 +17,26 @@ class App extends Component {
     largeImageURL: null,
   };
 
-  async componentDidMount() {
+  componentDidMount() {
     const { currentPage } = this.state;
-    await this.fetchImages(currentPage);
+    this.fetchImages(currentPage);
   }
 
-  async componentDidUpdate(prevProps, prevState) {
-    const { searchQuery, currentPage } = this.state;
-    if (prevState.searchQuery !== searchQuery) {
-      await this.fetchImages(1);
-    } else if (prevState.currentPage !== currentPage) {
-      await this.fetchImages(currentPage);
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.searchQuery !== this.state.searchQuery) {
+      this.setState({
+        images: [],
+        currentPage: 1,
+        isLoadMoreButtonVisible: false,
+        isLoading: false,
+        totalHits: null,
+      });
+
+      this.fetchImages(1);
+    }
+
+    if (prevState.currentPage !== this.state.currentPage) {
+      this.fetchImages(this.state.currentPage);
     }
   }
 
@@ -48,6 +52,25 @@ class App extends Component {
     });
   }
 
+  fetchImages = async page => {
+    const { searchQuery } = this.state;
+    this.setState({ isLoading: true });
+
+    const { images, totalHits, isLoadMoreButtonVisible } = await fetchImages(
+      searchQuery,
+      page
+    );
+
+    this.setState(prevState => ({
+      images: [...prevState.images, ...images],
+      currentPage: page,
+      isLoadMoreButtonVisible,
+      totalHits,
+    }));
+
+    this.setState({ isLoading: false });
+  };
+
   handleSubmit = query => {
     this.setState({
       searchQuery: query,
@@ -62,34 +85,6 @@ class App extends Component {
     const { currentPage } = this.state;
     this.setState({ currentPage: currentPage + 1 });
   };
-
-  async fetchImages(page) {
-    const { searchQuery, images } = this.state;
-    this.setState({ isLoading: true });
-
-    try {
-      const data = await fetchImages(searchQuery, page);
-
-      const newImages = data.hits.map(
-        ({ id, webformatURL, largeImageURL }) => ({
-          id,
-          webformatURL,
-          largeImageURL,
-        })
-      );
-
-      this.setState(prevState => ({
-        images: [...prevState.images, ...newImages],
-        totalHits: data.totalHits,
-        isLoadMoreButtonVisible:
-          images.length + newImages.length < data.totalHits,
-      }));
-    } catch (error) {
-      console.log(error);
-    } finally {
-      this.setState({ isLoading: false });
-    }
-  }
 
   handleOpenModal = largeImageURL => {
     this.setState({ largeImageURL });
