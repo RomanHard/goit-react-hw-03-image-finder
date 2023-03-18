@@ -18,6 +18,7 @@ class App extends Component {
   };
 
   componentDidMount() {
+    window.addEventListener('keydown', this.handleKeyDown);
     const { currentPage } = this.state;
     this.fetchImages(currentPage);
   }
@@ -44,6 +45,8 @@ class App extends Component {
   }
 
   componentWillUnmount() {
+    window.removeEventListener('keydown', this.handleKeyDown);
+
     this.setState({
       searchQuery: '',
       images: [],
@@ -54,6 +57,12 @@ class App extends Component {
       largeImageURL: null,
     });
   }
+
+  handleKeyDown = e => {
+    if (e.code === 'Escape') {
+      this.setState({ largeImageURL: null });
+    }
+  };
 
   fetchImages = async page => {
     const { searchQuery } = this.state;
@@ -103,8 +112,10 @@ class App extends Component {
     this.setState({ largeImageURL });
   };
 
-  handleCloseModal = () => {
-    this.setState({ largeImageURL: null });
+  handleCloseModal = event => {
+    if (event.target === event.currentTarget) {
+      this.setState({ largeImageURL: null });
+    }
   };
 
   render() {
