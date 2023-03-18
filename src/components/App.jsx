@@ -9,7 +9,7 @@ import { fetchImages } from './api/Api';
 class App extends Component {
   state = {
     searchQuery: '',
-    images: [],
+    images: null,
     currentPage: 1,
     isLoadMoreButtonVisible: false,
     isLoading: false,
@@ -25,7 +25,7 @@ class App extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (prevState.searchQuery !== this.state.searchQuery) {
       this.setState({
-        images: null,
+        images: [],
         currentPage: 1,
         isLoadMoreButtonVisible: false,
         isLoading: false,
@@ -65,7 +65,7 @@ class App extends Component {
     );
 
     this.setState({
-      images,
+      images: this.state.images ? [...this.state.images, ...images] : images,
       currentPage: page,
       isLoadMoreButtonVisible,
       totalHits,
@@ -77,7 +77,7 @@ class App extends Component {
   handleSubmit = query => {
     this.setState({
       searchQuery: query,
-      images: [],
+      images: null,
       currentPage: 1,
       isLoadMoreButtonVisible: false,
       isLoading: false,

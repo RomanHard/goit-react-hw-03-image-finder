@@ -8,12 +8,11 @@ class ImageGallery extends Component {
 
     return (
       <ul className="gallery">
-        {images.map(({ id, webformatURL, largeImageURL }) => (
+        {images.map((image, index) => (
           <ImageGalleryItem
-            key={id}
-            webformatURL={webformatURL}
-            largeImageURL={largeImageURL}
-            onClick={onClick}
+            key={`${image.webformatURL}-${index}`}
+            webformatURL={image.webformatURL}
+            onClick={() => onClick(image.largeImageURL)}
           />
         ))}
       </ul>
