@@ -25,7 +25,7 @@ class App extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (prevState.searchQuery !== this.state.searchQuery) {
       this.setState({
-        images: [],
+        images: null,
         currentPage: 1,
         isLoadMoreButtonVisible: false,
         isLoading: false,
@@ -85,18 +85,18 @@ class App extends Component {
   };
 
   handleLoadMoreClick = async () => {
-    const { currentPage } = this.state;
+    const { currentPage, images } = this.state;
     const nextPage = currentPage + 1;
     const { images: newImages, isLoadMoreButtonVisible } = await fetchImages(
       this.state.searchQuery,
       nextPage
     );
 
-    this.setState(prevState => ({
-      images: [...prevState.images, ...newImages],
+    this.setState({
+      images: [...images, ...newImages],
       currentPage: nextPage,
       isLoadMoreButtonVisible,
-    }));
+    });
   };
 
   handleOpenModal = largeImageURL => {
@@ -113,7 +113,9 @@ class App extends Component {
     return (
       <div className="App">
         <Searchbar onSubmit={this.handleSubmit} />
-        <ImageGallery images={images} onClick={this.handleOpenModal} />
+        {images !== null && (
+          <ImageGallery images={images} onClick={this.handleOpenModal} />
+        )}
         {isLoading && <Spinner />}
         {isLoadMoreButtonVisible && (
           <Button onClick={this.handleLoadMoreClick} disabled={isLoading} />
