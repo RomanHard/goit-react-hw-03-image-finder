@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
 import './Modal-module.css';
-
 import PropTypes from 'prop-types';
 
 class Modal extends Component {
+  handleCloseModal = event => {
+    if (event && event.target && event.target === event.currentTarget) {
+      this.props.closeModal();
+    }
+  };
+
   handleKeyDown = e => {
     if (e.code === 'Escape') {
-      this.props.onClose();
+      this.props.closeModal();
     }
   };
 
@@ -19,10 +24,10 @@ class Modal extends Component {
   }
 
   render() {
-    const { largeImageURL, onClose } = this.props;
+    const { largeImageURL } = this.props;
 
     return (
-      <div className="Overlay" onClick={onClose}>
+      <div className="Overlay" onClick={this.handleCloseModal}>
         <div className="Modal">
           <img src={largeImageURL} alt="" />
         </div>
@@ -33,7 +38,7 @@ class Modal extends Component {
 
 Modal.propTypes = {
   largeImageURL: PropTypes.string.isRequired,
-  onClose: PropTypes.func.isRequired,
+  closeModal: PropTypes.func.isRequired,
 };
 
 export default Modal;

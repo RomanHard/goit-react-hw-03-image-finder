@@ -72,10 +72,8 @@ class App extends Component {
     this.setState({ largeImageURL });
   };
 
-  handleCloseModal = event => {
-    if (event && event.target && event.target === event.currentTarget) {
-      this.setState({ largeImageURL: null });
-    }
+  handlCloseModal = () => {
+    this.setState({ largeImageURL: null });
   };
 
   render() {
@@ -94,7 +92,7 @@ class App extends Component {
         {this.state.largeImageURL && (
           <Modal
             largeImageURL={this.state.largeImageURL}
-            onClose={this.handleCloseModal}
+            closeModal={this.handlCloseModal}
           />
         )}
       </div>
