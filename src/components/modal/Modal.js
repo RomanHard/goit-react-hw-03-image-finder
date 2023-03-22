@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import './Modal-module.css';
 
+import PropTypes from 'prop-types';
+
 class Modal extends Component {
   handleKeyDown = e => {
     if (e.code === 'Escape') {
@@ -28,5 +30,10 @@ class Modal extends Component {
     );
   }
 }
+
+Modal.propTypes = {
+  largeImageURL: PropTypes.string.isRequired,
+  onClose: PropTypes.func.isRequired,
+};
 
 export default Modal;
