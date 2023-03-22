@@ -17,22 +17,8 @@ class App extends Component {
     largeImageURL: null,
   };
 
-  componentDidMount() {
-    window.addEventListener('keydown', this.handleKeyDown);
-    const { currentPage } = this.state;
-    this.fetchImages(currentPage);
-  }
-
   componentDidUpdate(prevProps, prevState) {
     if (prevState.searchQuery !== this.state.searchQuery) {
-      this.setState({
-        images: [],
-        currentPage: 1,
-        isLoadMoreButtonVisible: false,
-        isLoading: false,
-        totalHits: null,
-      });
-
       this.fetchImages(1);
     }
 
@@ -46,16 +32,6 @@ class App extends Component {
 
   componentWillUnmount() {
     window.removeEventListener('keydown', this.handleKeyDown);
-
-    this.setState({
-      searchQuery: '',
-      images: [],
-      currentPage: 1,
-      isLoadMoreButtonVisible: false,
-      isLoading: false,
-      totalHits: null,
-      largeImageURL: null,
-    });
   }
 
   handleKeyDown = e => {
@@ -85,11 +61,11 @@ class App extends Component {
 
   handleSubmit = query => {
     this.setState({
-      searchQuery: query,
-      images: null,
+      images: [],
       currentPage: 1,
       isLoadMoreButtonVisible: false,
       isLoading: false,
+      totalHits: null,
     });
   };
 
