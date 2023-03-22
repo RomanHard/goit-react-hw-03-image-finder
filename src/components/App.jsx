@@ -20,10 +20,9 @@ class App extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (
       prevState.searchQuery !== this.state.searchQuery ||
-      (prevState.currentPage !== this.state.currentPage &&
-        this.state.images.length > 0)
+      prevState.currentPage !== this.state.currentPage
     ) {
-      this.fetchImages(this.state.currentPage);
+      this.fetchImages();
     }
   }
 
