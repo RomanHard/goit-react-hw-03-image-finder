@@ -51,6 +51,7 @@ class App extends Component {
 
   handleSubmit = query => {
     this.setState({
+      searchQuery: query,
       images: [],
       currentPage: 1,
       isLoadMoreButtonVisible: false,
