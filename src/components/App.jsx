@@ -30,16 +30,6 @@ class App extends Component {
     }
   }
 
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.handleKeyDown);
-  }
-
-  handleKeyDown = e => {
-    if (e.code === 'Escape') {
-      this.setState({ largeImageURL: null });
-    }
-  };
-
   fetchImages = async page => {
     const { searchQuery } = this.state;
     this.setState({ isLoading: true });
