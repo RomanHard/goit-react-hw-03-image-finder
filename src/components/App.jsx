@@ -18,13 +18,10 @@ class App extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.searchQuery !== this.state.searchQuery) {
-      this.fetchImages(1);
-    }
-
     if (
-      prevState.currentPage !== this.state.currentPage &&
-      this.state.images.length > 0
+      prevState.searchQuery !== this.state.searchQuery ||
+      (prevState.currentPage !== this.state.currentPage &&
+        this.state.images.length > 0)
     ) {
       this.fetchImages(this.state.currentPage);
     }
@@ -40,7 +37,7 @@ class App extends Component {
     );
 
     this.setState({
-      images: this.state.images ? [...this.state.images, ...images] : images,
+      images: [...this.state.images, ...images] || images,
       currentPage: page,
       isLoadMoreButtonVisible,
       totalHits,
