@@ -31,19 +31,25 @@ class App extends Component {
     const { searchQuery } = this.state;
     this.setState({ isLoading: true });
 
-    const { images, totalHits, isLoadMoreButtonVisible } = await fetchImages(
-      searchQuery,
-      page
-    );
+    try {
+      const { images, totalHits, isLoadMoreButtonVisible } = await fetchImages(
+        searchQuery,
+        page
+      );
 
-    this.setState({
-      images: [...this.state.images, ...images] || images,
-      currentPage: page,
-      isLoadMoreButtonVisible,
-      totalHits,
-    });
+      this.setState({
+        images: [...this.state.images, ...images] || images,
+        currentPage: page,
+        isLoadMoreButtonVisible,
+        totalHits,
+      });
 
-    this.setState({ isLoading: false });
+      return { images, totalHits, isLoadMoreButtonVisible };
+    } catch (error) {
+      console.error('Error fetching images: ', error);
+    } finally {
+      this.setState({ isLoading: false });
+    }
   };
 
   handleSubmit = query => {
