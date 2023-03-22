@@ -37,13 +37,10 @@ class App extends Component {
       );
 
       this.setState({
-        images: [...this.state.images, ...images] || images,
-        currentPage: page,
+        images: [...this.state.images, ...images],
         isLoadMoreButtonVisible,
         totalHits,
       });
-
-      return { images, totalHits, isLoadMoreButtonVisible };
     } catch (error) {
       console.error('Error fetching images: ', error);
     } finally {
@@ -64,7 +61,7 @@ class App extends Component {
 
   handleLoadMoreClick = async () => {
     const { currentPage } = this.state;
-    this.fetchImages(currentPage + 1);
+    this.setState({ currentPage: currentPage + 1 });
   };
 
   handleOpenModal = largeImageURL => {
