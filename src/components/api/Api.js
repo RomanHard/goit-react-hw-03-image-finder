@@ -23,7 +23,7 @@ export const fetchImages = async (searchQuery, page) => {
     }));
 
     const totalHits = data.totalHits;
-    const isLoadMoreButtonVisible = images.length < totalHits;
+    const isLoadMoreButtonVisible = totalHits > 0 && totalHits > page * 12;
 
     return { images, totalHits, isLoadMoreButtonVisible };
   } catch (error) {

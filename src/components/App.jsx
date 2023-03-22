@@ -22,7 +22,7 @@ class App extends Component {
       prevState.searchQuery !== this.state.searchQuery ||
       prevState.currentPage !== this.state.currentPage
     ) {
-      this.fetchImages();
+      this.fetchImages(this.state.currentPage, this.state.searchQuery);
     }
   }
 
@@ -38,8 +38,8 @@ class App extends Component {
 
       this.setState({
         images: [...this.state.images, ...images],
-        isLoadMoreButtonVisible,
         totalHits,
+        isLoadMoreButtonVisible,
       });
     } catch (error) {
       console.error('Error fetching images: ', error);
