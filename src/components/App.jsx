@@ -80,7 +80,7 @@ class App extends Component {
   };
 
   handleCloseModal = event => {
-    if (event.target === event.currentTarget) {
+    if (event && event.target && event.target === event.currentTarget) {
       this.setState({ largeImageURL: null });
     }
   };
